@@ -1,6 +1,8 @@
-.gfield--type-utm_tracker {
-    height: 0;
-    opacity: 0;
-    padding: 0;
-    position: absolute;
+.utm_id input,
+.utm_term input,
+.utm_content input,
+.utm_source input,
+.utm_medium input,
+.utm_campaign input{
+    width: 100% !important;
 }

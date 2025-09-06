@@ -14,30 +14,24 @@ class Gravity_Form_UTM_Tracker {
     }
 
     private function __construct() {
-        // Populate dynamically (optional)
         foreach ($this->utm_keys as $key) {
             add_filter("gform_field_value_{$key}", [$this, 'get_utm_value']);
         }
 
-        // Inject hidden fields automatically
         add_filter('gform_pre_render', [$this, 'add_hidden_utm_fields']);
         add_filter('gform_pre_validation', [$this, 'add_hidden_utm_fields']);
         add_filter('gform_pre_submission_filter', [$this, 'add_hidden_utm_fields']);
         add_filter('gform_admin_pre_render', [$this, 'add_hidden_utm_fields']);
 
-        // Pre-submit hook to ensure data is saved
         add_filter('gform_pre_submission_filter', [$this, 'populate_hidden_utm_fields']);
 
-        // Enqueue JS
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
     }
 
-    // Return empty placeholder
     public function get_utm_value($value) {
         return '';
     }
 
-    // Inject hidden fields dynamically
     public function add_hidden_utm_fields($form) {
         foreach ($this->utm_keys as $key) {
             $exists = false;
@@ -52,7 +46,7 @@ class Gravity_Form_UTM_Tracker {
             $field = new GF_Field_Hidden();
             $field->label = strtoupper(str_replace('_',' ',$key));
             $field->inputName = $key;
-            $field->cssClass = $key;
+            $field->cssClass = $key . ' gf-column';
             $field->id = 1000 + count($form['fields']);
             $field->visibility = 'hidden';
             $field->allowsPrepopulate = true;
@@ -63,7 +57,6 @@ class Gravity_Form_UTM_Tracker {
         return $form;
     }
 
-    // Ensure hidden fields are populated from POST before submission
     public function populate_hidden_utm_fields($form) {
         foreach ($this->utm_keys as $key) {
             foreach ($form['fields'] as $field) {

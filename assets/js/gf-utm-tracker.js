@@ -1,63 +1,103 @@
+// ==============================
+// Capture UTM params & store in localStorage
+// ==============================
 (function () {
-    // Capture UTM params from URL and store in localStorage
     function getQueryParams() {
         let params = {};
-        window.location.search.substring(1).split("&").forEach(function(param){
+        const query = window.location.search.substring(1);
+        if (!query) return params;
+
+        query.split("&").forEach(function (param) {
             let pair = param.split("=");
-            if(pair.length===2) params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+            if (pair.length === 2) {
+                params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+            }
         });
         return params;
     }
 
     function storeUTMParams() {
         let utmParams = getQueryParams();
-        let utmKeys = ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content"];
-        utmKeys.forEach(function(key){
-            if(utmParams[key]) localStorage.setItem(key, utmParams[key]);
+        let utmKeys = ["utm_id", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+        utmKeys.forEach(function (key) {
+            if (utmParams[key]) {
+                localStorage.setItem(key, utmParams[key]);
+            }
         });
     }
 
     storeUTMParams();
 })();
 
-(function($){
-    var utmKeys = ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content"];
+// ==============================
+// Gravity Forms Integration
+// ==============================
+(function ($) {
+    var utmKeys = ["utm_id", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
 
-    function populateUTM($form){
-        utmKeys.forEach(function(key){
+    function removeUTMFromURL() {
+        if (window.history.replaceState) {
+            const url = new URL(window.location);
+            const params = url.searchParams;
+            let changed = false;
+
+            utmKeys.forEach(key => {
+                if (params.has(key)) {
+                    params.delete(key);
+                    changed = true;
+                }
+            });
+
+            if (changed) {
+                url.search = params.toString();
+                window.history.replaceState({}, document.title, url.toString());
+            }
+        }
+    }
+
+    function populateUTM($form) {
+        utmKeys.forEach(function (key) {
             var value = localStorage.getItem(key);
-            if(value){
+            if (value) {
                 var $field = $form.find('input[name^="input_"].' + key);
-                if($field.length) $field.val(value).trigger("change");
-                // Also add a hidden input for POST
-                if($form.find('input[name="'+key+'"]').length===0){
-                    $form.append('<input type="hidden" name="'+key+'" value="'+value+'">');
+                if ($field.length) {
+                    $field.val(value).trigger("change");
+                }
+
+                if ($form.find('input[name="' + key + '"]').length === 0) {
+                    $form.append('<input type="hidden" name="' + key + '" value="' + value + '">');
                 } else {
-                    $form.find('input[name="'+key+'"]').val(value);
+                    $form.find('input[name="' + key + '"]').val(value);
                 }
             }
         });
     }
 
-    // Populate AJAX forms
-    $(document).on('gform_post_render', function(event, formId){
+    $(document).on('gform_post_render', function (event, formId) {
         var $form = $('#gform_' + formId);
-        if($form.length) populateUTM($form);
+        if ($form.length) {
+            populateUTM($form);
+        }
     });
 
-    // Populate before normal submission
-    $('.gform_wrapper form').on('submit', function(){
+    $('.gform_wrapper form').on('submit', function () {
         populateUTM($(this));
     });
 
-    // Clear localStorage after AJAX success
-    window.gform_confirmation_loaded = function(formId){
-        utmKeys.forEach(function(key){ localStorage.removeItem(key); });
-    };
+    $(document).on('gform_confirmation_loaded', function (event, formId) {
+        utmKeys.forEach(function (key) {
+            localStorage.removeItem(key);
+        });
+        removeUTMFromURL();
+    });
 
-    // Clear localStorage after page reload (non-AJAX forms)
-    $(window).on('load', function(){
-        if($('.gform_confirmation_message').length) utmKeys.forEach(function(key){ localStorage.removeItem(key); });
+    $(window).on('load', function () {
+        if ($('.gform_confirmation_message').length) {
+            utmKeys.forEach(function (key) {
+                localStorage.removeItem(key);
+            });
+            removeUTMFromURL();
+        }
     });
 
 })(jQuery);
