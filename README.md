@@ -40,15 +40,6 @@ Supported UTM parameters:
 
 ---
 
-## Features
-
-- Automatically detects UTM parameters from URL query strings.  
-- Maps UTM parameters to Gravity Forms fields.  
-- Works seamlessly with multiple forms.  
-- Lightweight and easy to use.  
-
----
-
 ## Installation
 
 1. Download the plugin ZIP from this repository.  
