@@ -1,10 +1,10 @@
 === Easy UTM Tracker for Gravity Forms ===
 Contributors: mondoloz
-Tags: gravity forms, utm, tracking, leads, analytics, marketing
+Tags: gravity forms, utm, tracking, analytics, marketing
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,11 @@ Yes, it works with both AJAX and standard form submissions.
 Yes, since the population happens via JavaScript, it is compatible with most caching plugins.
 
 == Changelog ==
+
+= 1.1.1 =
+*   Fixed security warnings.
+*   Fixed issue with UTM formatting (space encoding).
+*   Renamed plugin to avoid collisions.
 
 = 1.1.0 =
 *   Refactored codebase for better performance and standards.

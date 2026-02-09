@@ -97,9 +97,11 @@ class Core
         foreach ($this->utm_keys as $key) {
             foreach ($form['fields'] as $field) {
                 if (isset($field->inputName) && $field->inputName === $key) {
+                    // phpcs:disable WordPress.Security.NonceVerification.Missing
                     if (isset($_POST[$key]) && !empty($_POST[$key])) {
-                        $_POST["input_{$field->id}"] = sanitize_text_field($_POST[$key]);
+                        $_POST["input_{$field->id}"] = sanitize_text_field(wp_unslash($_POST[$key]));
                     }
+                // phpcs:enable WordPress.Security.NonceVerification.Missing
                 }
             }
         }

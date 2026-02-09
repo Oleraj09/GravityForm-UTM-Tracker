@@ -3,7 +3,7 @@
  * Plugin Name: Easy UTM Tracker for Gravity Forms
  * Plugin URI:  https://github.com/oleraj09/GravityForm-UTM-Tracker
  * Description: Automatically captures UTM parameters (utm_source, utm_medium, utm_campaign, utm_term, utm_content) from URLs and populates corresponding Gravity Forms fields.
- * Version:     1.1.0
+ * Version:     1.1.1
  * Author:      Oleraj Hossin
  * Author URI:  https://olerajhossin.top
  * Text Domain: easy-utm-tracker-for-gravity-forms
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('GRAVITY_FORM_UTM_TRACKER_VERSION', '1.1.0');
+define('GRAVITY_FORM_UTM_TRACKER_VERSION', '1.1.1');
 define('GRAVITY_FORM_UTM_TRACKER_PATH', plugin_dir_path(__FILE__));
 define('GRAVITY_FORM_UTM_TRACKER_URL', plugin_dir_url(__FILE__));
 
