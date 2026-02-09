@@ -10,7 +10,7 @@
         query.split("&").forEach(function (param) {
             let pair = param.split("=");
             if (pair.length === 2) {
-                params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+                params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1].replace(/\+/g, ' '));
             }
         });
         return params;
@@ -26,7 +26,40 @@
         });
     }
 
-    storeUTMParams();
+    // Check for reset param or cookie
+    function checkReset() {
+        const params = getQueryParams();
+        const hasParam = params['utm_reset'] === '1';
+
+        // Helper to get cookie
+        function getCookie(name) {
+            let matches = document.cookie.match(new RegExp(
+                "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+            ));
+            return matches ? decodeURIComponent(matches[1]) : undefined;
+        }
+
+        const hasCookie = getCookie('gf_utm_reset') === '1';
+
+        if (hasParam || hasCookie) {
+            const utmKeys = ["utm_id", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+            utmKeys.forEach(key => localStorage.removeItem(key));
+
+            // Remove Cookie
+            document.cookie = "gf_utm_reset=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+
+            // Clean URL
+            if (hasParam && window.history.replaceState) {
+                const url = new URL(window.location);
+                url.searchParams.delete('utm_reset');
+                window.history.replaceState({}, document.title, url.toString());
+            }
+        } else {
+            storeUTMParams();
+        }
+    }
+
+    checkReset();
 })();
 
 // ==============================
@@ -65,7 +98,11 @@
                 }
 
                 if ($form.find('input[name="' + key + '"]').length === 0) {
-                    $form.append('<input type="hidden" name="' + key + '" value="' + value + '">');
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: key,
+                        value: value
+                    }).appendTo($form);
                 } else {
                     $form.find('input[name="' + key + '"]').val(value);
                 }
@@ -80,10 +117,12 @@
         }
     });
 
-    $('.gform_wrapper form').on('submit', function () {
+    // Populate on submit to ensure dynamic fields are caught
+    $(document).on('submit', '.gform_wrapper form', function () {
         populateUTM($(this));
     });
 
+    // Handle AJAX confirmation
     $(document).on('gform_confirmation_loaded', function (event, formId) {
         utmKeys.forEach(function (key) {
             localStorage.removeItem(key);
@@ -91,6 +130,9 @@
         removeUTMFromURL();
     });
 
+    // Handle Text Confirmation (Page Reload usually handles this via logic above if we wanted, but here we just clean on load if confirmation exists)
+    // Actually, if it's a text confirmation on a new page (non-ajax), the previous page submission should have theoretically handled it? 
+    // No, standard submission reloads page.
     $(window).on('load', function () {
         if ($('.gform_confirmation_message').length) {
             utmKeys.forEach(function (key) {

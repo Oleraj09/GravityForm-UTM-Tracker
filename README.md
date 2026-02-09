@@ -19,7 +19,7 @@ This plugin solves that problem by **persistently storing UTM parameters** as us
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](http://www.gnu.org/licenses/gpl-2.0.txt)
 
-**Plugin URI:** [https://github.com/Oleraj09/GravityForm-UTM-Tracker](https://github.com/Oleraj09/GravityForm-UTM-Tracker)  
+**Plugin URI:** [https://github.com/mondoloz/GravityForm-UTM-Tracker](https://github.com/mondoloz/GravityForm-UTM-Tracker)  
 **Author:** Oleraj Hossin ([https://olerajhossin.top](https://olerajhossin.top))  
 **Version:** 1.0.0  
 **License:** GPL-2.0+  

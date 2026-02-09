@@ -1,32 +1,32 @@
 <?php
 /**
- * Plugin Name: Gravity Forms UTM Tracker
- * Plugin URI:  https://github.com/Oleraj09/GravityForm-UTM-Tracker
- * Description: Automatically captures UTM parameters (utm_source, utm_medium, utm_campaign, utm_term, utm_content) from URLs and populates corresponding Gravity Forms fields for advanced lead tracking and analytics.
- * Version:     1.0.0
+ * Plugin Name: Easy UTM Tracker for Gravity Forms
+ * Plugin URI:  https://github.com/oleraj09/GravityForm-UTM-Tracker
+ * Description: Automatically captures UTM parameters (utm_source, utm_medium, utm_campaign, utm_term, utm_content) from URLs and populates corresponding Gravity Forms fields.
+ * Version:     1.1.0
  * Author:      Oleraj Hossin
  * Author URI:  https://olerajhossin.top
- * Text Domain: gf-utm-tracker
+ * Text Domain: easy-utm-tracker-for-gravity-forms
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * Requires at least: 5.0
  * GF requires at least: 2.0
  */
 
-if (!defined('ABSPATH'))
+if (!defined('ABSPATH')) {
     exit;
+}
 
-require_once plugin_dir_path(__FILE__) . 'include/class-utm-tracker.php';
+define('GRAVITY_FORM_UTM_TRACKER_VERSION', '1.1.0');
+define('GRAVITY_FORM_UTM_TRACKER_PATH', plugin_dir_path(__FILE__));
+define('GRAVITY_FORM_UTM_TRACKER_URL', plugin_dir_url(__FILE__));
 
-add_action('admin_enqueue_scripts', function () {
-    wp_enqueue_style(
-        'gravity-form-utm-tracker',
-        plugin_dir_url(__FILE__) . 'assets/css/gf-utm-tracker.css',
-        [],
-        '1.0'
-    );
-});
+require_once GRAVITY_FORM_UTM_TRACKER_PATH . 'includes/class-core.php';
+require_once GRAVITY_FORM_UTM_TRACKER_PATH . 'includes/class-assets.php';
 
 add_action('plugins_loaded', function () {
-    Gravity_Form_UTM_Tracker::get_instance();
+    if (class_exists('GFForms')) {
+        \GravityFormUTMTracker\Core::get_instance();
+        \GravityFormUTMTracker\Assets::get_instance();
+    }
 });
