@@ -1,5 +1,5 @@
 <?php
-namespace GravityFormUTMTracker;
+namespace Mondoloz\GravityFormUTMTracker;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -27,10 +27,10 @@ class Assets
     public function enqueue_scripts()
     {
         wp_enqueue_script(
-            'easy-utm-tracker-for-gravity-forms',
-            GRAVITY_FORM_UTM_TRACKER_URL . 'assets/js/gf-utm-tracker.js',
+            'mondoloz-utm-tracker-for-gravity-forms',
+            MONDOLOZ_GF_UTM_TRACKER_URL . 'assets/js/mondoloz-gf-utm-tracker.js',
         ['jquery'],
-            GRAVITY_FORM_UTM_TRACKER_VERSION,
+            MONDOLOZ_GF_UTM_TRACKER_VERSION,
             true
         );
     }
@@ -38,10 +38,10 @@ class Assets
     public function enqueue_admin_styles()
     {
         wp_enqueue_style(
-            'gravity-form-utm-tracker',
-            GRAVITY_FORM_UTM_TRACKER_URL . 'assets/css/gf-utm-tracker.css',
+            'mondoloz-utm-tracker-for-gravity-forms',
+            MONDOLOZ_GF_UTM_TRACKER_URL . 'assets/css/mondoloz-gf-utm-tracker.css',
         [],
-            GRAVITY_FORM_UTM_TRACKER_VERSION
+            MONDOLOZ_GF_UTM_TRACKER_VERSION
         );
     }
 }

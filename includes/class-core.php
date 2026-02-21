@@ -1,5 +1,5 @@
 <?php
-namespace GravityFormUTMTracker;
+namespace Mondoloz\GravityFormUTMTracker;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -124,7 +124,7 @@ class Core
 
             // Set cookie as fallback (valid for 1 hour)
             if (!headers_sent()) {
-                setcookie('gf_utm_reset', '1', time() + 3600, '/');
+                setcookie('mondoloz_gf_utm_reset', '1', time() + 3600, '/');
             }
         }
         return $confirmation;

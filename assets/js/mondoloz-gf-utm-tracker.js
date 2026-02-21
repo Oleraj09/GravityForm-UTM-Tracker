@@ -39,14 +39,14 @@
             return matches ? decodeURIComponent(matches[1]) : undefined;
         }
 
-        const hasCookie = getCookie('gf_utm_reset') === '1';
+        const hasCookie = getCookie('mondoloz_gf_utm_reset') === '1';
 
         if (hasParam || hasCookie) {
             const utmKeys = ["utm_id", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
             utmKeys.forEach(key => localStorage.removeItem(key));
 
             // Remove Cookie
-            document.cookie = "gf_utm_reset=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            document.cookie = "mondoloz_gf_utm_reset=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
 
             // Clean URL
             if (hasParam && window.history.replaceState) {
